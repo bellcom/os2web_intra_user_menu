@@ -28,9 +28,13 @@ function os2web_intra_user_menu_block_view($delta = ''){
   switch($delta){
     case 'top_menu':
       global $user;
+
+      // Load organization taxonomy vocabulary
+      // get tree
       $vocab = taxonomy_vocabulary_machine_name_load('os2intra_organizaiton_tax');
       $tree = taxonomy_get_tree($vocab->vid);
 
+      // Determine parent
       foreach($tree as $term){
         if($term->parents[0] == 0){
           $top_org_tid = $term->tid;
@@ -38,14 +42,20 @@ function os2web_intra_user_menu_block_view($delta = ''){
         }
       }
 
-      $term = taxonomy_term_load($top_org_tid);
+      // Get users OG group memberships
+      // Just get the first one, normal users shouldn't have
+      // more than one
+      $user_groups = og_get_groups_by_user($user);
+      $user_group_id = array_shift(reset($user_groups));
 
+      // Build list with links
       $items = array();
 
       $items[] = l($user->name, 'user');
 
-      $items[] = '<a href="">'. t('My department') . '</a>';
+      $items[] = '<a href="/node/'.$user_group_id.'">'. t('My department') . '</a>';
 
+      // If the user can use node basket, display the basket link
       if(user_access('use node basket')){
         $items[] = '<a href="/node_basket/basket/view">'.t('Basket').'</a>';
       }
