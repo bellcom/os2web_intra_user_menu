@@ -28,33 +28,35 @@ function os2web_intra_user_menu_block_view($delta = ''){
   switch($delta){
     case 'top_menu':
       global $user;
-      $vocab = taxonomy_vocabulary_machine_name_load('os2intra_organizaiton_tax');
-      $tree = taxonomy_get_tree($vocab->vid);
+      if($user->uid){
+        $vocab = taxonomy_vocabulary_machine_name_load('os2intra_organizaiton_tax');
+        $tree = taxonomy_get_tree($vocab->vid);
 
-      foreach($tree as $term){
-        if($term->parents[0] == 0){
-          $top_org_tid = $term->tid;
-          continue;
+        foreach($tree as $term){
+          if($term->parents[0] == 0){
+            $top_org_tid = $term->tid;
+            continue;
+          }
         }
+
+        $term = taxonomy_term_load($top_org_tid);
+
+        $items = array();
+
+        $items[] = l($user->name, 'user');
+
+        $items[] = '<a href="">'. t('My department') . '</a>';
+
+        if(user_access('use node basket')){
+          $items[] = '<a href="/node_basket/basket/view">'.t('Basket').'</a>';
+        }
+
+        $items[] = '<a href="/taxonomy/term/'.$top_org_tid.'">'. t('Municipality') . '</a>';
+
+        $markup = theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => array()));
+        $block['content'] = $markup;
+        break;
       }
-
-      $term = taxonomy_term_load($top_org_tid);
-
-      $items = array();
-
-      $items[] = l($user->name, 'user');
-
-      $items[] = '<a href="">'. t('My department') . '</a>';
-
-      if(user_access('use node basket')){
-        $items[] = '<a href="/node_basket/basket/view">'.t('Basket').'</a>';
-      }
-
-      $items[] = '<a href="/taxonomy/term/'.$top_org_tid.'">'. t('Municipality') . '</a>';
-
-      $markup = theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => array()));
-      $block['content'] = $markup;
-      break;
   }
 
   return $block;
