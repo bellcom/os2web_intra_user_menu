@@ -28,6 +28,18 @@ function os2web_intra_user_menu_block_view($delta = ''){
   switch($delta){
     case 'top_menu':
       global $user;
+      $user_entity = user_load($user->uid);
+
+      // Get users real name
+      $name = "";
+
+      if(!empty($user_entity->field_name_first)){
+        $name = $user_entity->field_name_first[LANGUAGE_NONE][0]['value'];
+      }
+      
+      if(!empty($user_entity->field_name_last)){
+        $name .= ' ' . $user_entity->field_name_last[LANGUAGE_NONE][0]['value'];
+      }
 
       // Load organization taxonomy vocabulary
       // get tree
@@ -51,15 +63,16 @@ function os2web_intra_user_menu_block_view($delta = ''){
       // more than one
       $user_groups = og_get_groups_by_user($user);
       $user_group_id = array_shift(reset($user_groups));
+      $user_group = node_load($user_group_id);
 
       // Build list with links
       $items = array();
 
         $items = array();
 
-        $items[] = l($user->name, 'user');
+        $items[] = l($name, 'user');
 
-      	$items[] = '<a href="/node/'.$user_group_id.'">'. t('My department') . '</a>';
+      	$items[] = '<a href="/node/'.$user_group_id.'">'. $user_group->title . '</a>';
 
         // If the user can use node basket, display the basket link
         if(user_access('use node basket')){
