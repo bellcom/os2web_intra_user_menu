@@ -36,7 +36,7 @@ function os2web_intra_user_menu_block_view($delta = ''){
       if(!empty($user_entity->field_name_first)){
         $name = $user_entity->field_name_first[LANGUAGE_NONE][0]['value'];
       }
-      
+
       if(!empty($user_entity->field_name_last)){
         $name .= ' ' . $user_entity->field_name_last[LANGUAGE_NONE][0]['value'];
       }
@@ -67,19 +67,20 @@ function os2web_intra_user_menu_block_view($delta = ''){
 
       // Build list with links
       $items = array();
-
         $items = array();
 
         $items[] = l($name, 'user');
 
-      	$items[] = '<a href="/node/'.$user_group_id.'">'. $user_group->title . '</a>';
+        $items[] = '<a href="/node/'.$user_group_id.'">'. $user_group->title . '</a>';
 
         // If the user can use node basket, display the basket link
         if(user_access('use node basket')){
-	  $items[] = '<a href="/node_basket/basket/view">'.t('Basket').'</a>';
+          $items[] = '<a href="/node_basket/basket/view">'.t('Basket').'</a>';
         }
 
         $items[] = '<a href="/taxonomy/term/'.$top_org_tid.'">'. t('Municipality') . '</a>';
+
+        $items[] = '<a href="/user/logout/">' . t('Log out') . '</a>';
 
         $markup = theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => array()));
         $block['content'] = $markup;
