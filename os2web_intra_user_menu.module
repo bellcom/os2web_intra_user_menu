@@ -82,6 +82,8 @@ function os2web_intra_user_menu_block_view($delta = ''){
 
         $items[] = '<a href="/user/logout/">' . t('Log out') . '</a>';
 
+        $items[] = '<a href="/groups/">' . t('Groups') . '</a>';
+
         $markup = theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => array()));
         $block['content'] = $markup;
         break;
