@@ -84,6 +84,11 @@ function os2web_intra_user_menu_block_view($delta = ''){
 
         $items[] = '<a href="/user/logout/">' . t('Log out') . '</a>';
 
+        $img_path = drupal_get_path('theme','intranet_theme')."/images/help.png";
+
+        //Yani: add help link to the user menu.
+        $items[] = '<a href="/intranet"><img style="height:20px;width:20px;vertical-align:middle;" src="/'. $img_path . '" /></a>';
+
         $markup = theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => array()));
         $block['content'] = $markup;
         break;
